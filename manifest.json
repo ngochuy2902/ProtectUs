@@ -1,0 +1,50 @@
+{
+  "name": "Protect us!",
+  "description": "I am here to protect us!",
+  "version": "1.0",
+  "manifest_version": 2,
+  "browser_action": {
+    "default_title": "ProtectUs",
+    "default_popup": "/popup/popup.html",
+    "default_icon": {
+      "16": "/images/icons/icon16.png",
+      "32": "/images/icons/icon32.png",
+      "48": "/images/icons/icon48.png",
+      "128": "/images/icons/icon128.png"
+    }
+  },
+  "background": {
+    "persistent": true,
+    "scripts": [
+      "/settings/constant.js",
+      "/scripts/startup.js",
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "icons": {
+    "16": "/images/icons/icon16.png",
+    "32": "/images/icons/icon32.png",
+    "48": "/images/icons/icon48.png",
+    "128": "/images/icons/icon128.png"
+  },
+  "options_page": "/options/options.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*/**",
+        "http://*/**"
+      ],
+      "css": [
+        "/styles/main.css"
+      ],
+      "js": [
+        "/scripts/constant.js",
+        "/scripts/content.js"
+      ]
+    }
+  ]
+}
