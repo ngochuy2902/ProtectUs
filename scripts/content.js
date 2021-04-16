@@ -15,6 +15,7 @@ contentPort.onMessage.addListener(function (msg, sender) {
         let prediction = msg.value.prediction;
         if (prediction == true) {
             cmt[cmtId].prediction = true;
+            cmt[cmtId].originalText = new String(cmt[cmtId].innerText);
         } else {
             cmt[cmtId].prediction = false;
         }
@@ -32,7 +33,7 @@ contentPort.onMessage.addListener(function (msg, sender) {
 function execute() {
     getData();
     getStatus();
-    if (status == ACTIVE) hideComment();
+    if (status == ACTIVE && cmt.length != 0) hideComment();
 }
 
 function getData() {
@@ -59,7 +60,6 @@ function getStatus() {
 function hideComment() {
     for (let i of cmt) {
         if (i.prediction == true) {
-            i.originalText = new String(i.firstChild.firstChild.innerText);
             i.firstChild.firstChild.innerText = HIDDEN_TEXT;
         }
     }
