@@ -1,9 +1,12 @@
 let contentPort = chrome.runtime.connect(null, { name: "contentPort" });
-
 let commentData = new Array();
 let messageData = new Array();
 let commentStatus = null;
 let messageStatus = null;
+
+contentPort.postMessage({
+    type: "initPort"
+});
 
 execute();
 
@@ -125,11 +128,17 @@ function getStatus() {
 }
 
 function hideComment() {
+    let count = 0;
     for (let data of commentData) {
         if (data.prediction == true) {
             data.firstChild.firstChild.innerText = HIDDEN_TEXT;
+            count++;
         }
     }
+    contentPort.postMessage({
+        type: "setCommentCount",
+        countNumber: count
+    }); 
 }
 
 function showComment() {
@@ -142,11 +151,17 @@ function showComment() {
 }
 
 function hideMessage() {
+    let count = 0;
     for (let data of messageData) {
         if (data.prediction == true) {
             data.firstChild.firstChild.innerText = HIDDEN_TEXT;
+            count++;
         }
     }
+    contentPort.postMessage({
+        type: "setMessageCount",
+        countNumber: count
+    });
 }
 
 function showMessage() {

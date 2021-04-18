@@ -1,7 +1,7 @@
 {
   "name": "Protect us!",
   "description": "I am here to protect us!",
-  "version": "1.1",
+  "version": "1.2.0",
   "manifest_version": 2,
   "browser_action": {
     "default_title": "ProtectUs",

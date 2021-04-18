@@ -5,3 +5,11 @@ if (!localStorage.getItem(PROTECTUS_COMMENT_STATUS_STORAGE)) {
 if (!localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)) {
   localStorage.setItem(PROTECTUS_MESSAGE_STATUS_STORAGE, DEFAULT_STATUS);
 }
+
+if (!localStorage.getItem(PROTECTUS_COMMENT_COUNT_STORAGE)) {
+  localStorage.setItem(PROTECTUS_COMMENT_COUNT_STORAGE, 0);
+}
+
+if (!localStorage.getItem(PROTECTUS_MESSAGE_COUNT_STORAGE)) {
+  localStorage.setItem(PROTECTUS_MESSAGE_COUNT_STORAGE, 0);
+}

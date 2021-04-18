@@ -41,6 +41,14 @@ chrome.runtime.onConnect.addListener(port => {
                     .catch(err => {
                         console.log('Error: ', err)
                     });
+            } else if (msg.type == 'setCommentCount' || msg.type == 'setMessageCount') {
+                if (!popupPort) {
+                    return;
+                }
+                popupPort.postMessage({
+                    type: msg.type,
+                    countNumber: msg.countNumber
+                });
             }
         });
     }
