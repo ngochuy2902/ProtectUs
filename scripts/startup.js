@@ -1,3 +1,7 @@
-if (localStorage.getItem(PROTECTUS_STORAGE) == null) {
-  localStorage.setItem(PROTECTUS_STORAGE, DEFAULT_STATUS);
+if (!localStorage.getItem(PROTECTUS_COMMENT_STATUS_STORAGE)) {
+  localStorage.setItem(PROTECTUS_COMMENT_STATUS_STORAGE, DEFAULT_STATUS);
+}
+
+if (!localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)) {
+  localStorage.setItem(PROTECTUS_MESSAGE_STATUS_STORAGE, DEFAULT_STATUS);
 }

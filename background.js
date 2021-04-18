@@ -1,19 +1,22 @@
-var contentPort = null;
-var popupPort = null;
+let contentPort = null;
+let popupPort = null;
 chrome.runtime.onConnect.addListener(port => {
     if (port.name == 'contentPort') {
         contentPort = port;
-        port.onMessage.addListener(function (msg, sender) {
-            if (msg.type == 'getStatus') {
-                port.postMessage({
+        contentPort.onMessage.addListener(function (msg, sender) {
+            if (msg.type == 'getCommentStatus') {
+                contentPort.postMessage({
                     type: msg.type,
-                    value: localStorage.getItem(PROTECTUS_STORAGE)
+                    value: localStorage.getItem(PROTECTUS_COMMENT_STATUS_STORAGE)
                 })
-            }
-
-            if (msg.type == 'getPredict') {
-                let data = msg.value;
-                let request = { "text": data }
+            } else if (msg.type == 'getMessageStatus') {
+                contentPort.postMessage({
+                    type: msg.type,
+                    value: localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)
+                })
+            } else if (msg.type == 'getPredict') {
+                let text = msg.value;
+                let request = { "text": text };
                 fetch(BASE_URL, {
                     method: 'POST',
                     headers: {
@@ -29,7 +32,8 @@ chrome.runtime.onConnect.addListener(port => {
                         response.json().then(data => {
                             port.postMessage({
                                 type: msg.type,
-                                cmtId: msg.cmtId,
+                                from: msg.from,
+                                dataId: msg.dataId,
                                 value: data
                             })
                         })
@@ -43,8 +47,17 @@ chrome.runtime.onConnect.addListener(port => {
 
     if (port.name == 'popupPort') {
         popupPort = port;
-        port.onMessage.addListener(function (msg, sender) {
-            if (msg.type == 'setStatus') {
+        popupPort.onMessage.addListener(function (msg, sender) {
+            if (!contentPort) {
+                return;
+            }
+            if (msg.type == 'setCommentStatus') {
+                contentPort.postMessage({
+                    type: msg.type,
+                    value: msg.value
+                });
+            }
+            if (msg.type == 'setMessageStatus') {
                 contentPort.postMessage({
                     type: msg.type,
                     value: msg.value

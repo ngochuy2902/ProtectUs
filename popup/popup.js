@@ -1,25 +1,49 @@
-let buttonAction = document.getElementById("buttonAction");
-if (localStorage.getItem(PROTECTUS_STORAGE) == ACTIVE) {
-  buttonAction.checked = true;
+let buttonComment = document.getElementById("buttonComment");
+let buttonMessage = document.getElementById("buttonMessage");
+
+let popupPort = chrome.runtime.connect(null, { name: "popupPort" });
+
+if (localStorage.getItem(PROTECTUS_COMMENT_STATUS_STORAGE) == ACTIVE) {
+  buttonComment.checked = true;
+}
+if (localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE) == ACTIVE) {
+  buttonMessage.checked = true;
 }
 
-var popupPort = chrome.runtime.connect(null, { name: "popupPort" });
 
-buttonAction.onclick = () => {
+buttonComment.onclick = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-    let status = localStorage.getItem(PROTECTUS_STORAGE);
-    if (status == INACTIVE) {
+    if (localStorage.getItem(PROTECTUS_COMMENT_STATUS_STORAGE) == INACTIVE) {
       popupPort.postMessage({
-        type: "setStatus",
+        type: "setCommentStatus",
         value: ACTIVE
       });
-      localStorage.setItem(PROTECTUS_STORAGE, ACTIVE);
+      localStorage.setItem(PROTECTUS_COMMENT_STATUS_STORAGE, ACTIVE);
     } else {
       popupPort.postMessage({
-        type: "setStatus",
+        type: "setCommentStatus",
         value: INACTIVE
       });
-      localStorage.setItem(PROTECTUS_STORAGE, INACTIVE);
+      localStorage.setItem(PROTECTUS_COMMENT_STATUS_STORAGE, INACTIVE);
     }
   });
 };
+
+buttonMessage.onclick = () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    if (localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)  == INACTIVE) {
+      popupPort.postMessage({
+        type: "setMessageStatus",
+        value: ACTIVE
+      });
+      localStorage.setItem(PROTECTUS_MESSAGE_STATUS_STORAGE, ACTIVE);
+    } else {
+      popupPort.postMessage({
+        type: "setMessageStatus",
+        value: INACTIVE
+      });
+      localStorage.setItem(PROTECTUS_MESSAGE_STATUS_STORAGE, INACTIVE);
+    }
+  });
+};
+

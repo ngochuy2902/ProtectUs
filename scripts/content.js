@@ -1,26 +1,51 @@
-var contentPort = chrome.runtime.connect(null, { name: 'contentPort' });
+let contentPort = chrome.runtime.connect(null, { name: "contentPort" });
 
-let cmt = new Array();
-var status = null;
+let commentData = new Array();
+let messageData = new Array();
+let commentStatus = null;
+let messageStatus = null;
 
 execute();
 
-window.addEventListener('scroll', function () {
+window.addEventListener("scroll", function () {
+    execute();
+});
+
+window.addEventListener("mousemove", function () {
+    execute();
+});
+
+window.addEventListener("click", function () {
     execute();
 });
 
 contentPort.onMessage.addListener(function (msg, sender) {
-    if (msg.type == 'getPredict') {
-        let cmtId = msg.cmtId;
+    if (msg.type == "getPredict") {
+        let from = msg.from;
+        let dataId = msg.dataId;
         let prediction = msg.value.prediction;
-        if (prediction == true) {
-            cmt[cmtId].prediction = true;
-            cmt[cmtId].originalText = new String(cmt[cmtId].innerText);
-        } else {
-            cmt[cmtId].prediction = false;
+        console.log("prediction ", prediction);
+        if (from == "comment") {
+            if (prediction == true) {
+                commentData[dataId].prediction = true;
+                commentData[dataId].originalText = new String(commentData[dataId].innerText);
+            } else {
+                commentData[dataId].prediction = false;
+            }
         }
+        if (from == "message") {
+            if (prediction == true) {
+                messageData[dataId].prediction = true;
+                messageData[dataId].originalText = new String(messageData[dataId].innerText);
+            } else {
+                messageData[dataId].prediction = false;
+            }
+        }
+        console.log("commentData ", commentData);
+        console.log("messageData ", messageData);
     }
-    if (msg.type == 'setStatus') {
+    
+    if (msg.type == "setCommentStatus") {
         let status = msg.value;
         if (status == ACTIVE) {
             hideComment();
@@ -28,55 +53,107 @@ contentPort.onMessage.addListener(function (msg, sender) {
             showComment();
         }
     }
+    if (msg.type == "setMessageStatus") {
+        let status = msg.value;
+        if (status == ACTIVE) {
+            hideMessage();
+        } else {
+            showMessage();
+        }
+    }
 });
 
 function execute() {
-    getData();
+    getCommentData();
+    getMessageData();
     getStatus();
-    if (status == ACTIVE && cmt.length != 0) hideComment();
+    if (commentStatus == ACTIVE && commentData.length != 0) hideComment();
+    if (messageStatus == ACTIVE && messageData.length != 0) hideMessage();
+    window.fb
 }
 
-function getData() {
-    let data = Array.from(
-        document.getElementsByClassName('ecm0bbzt e5nlhep0 a8c37x1j')
+function getCommentData() {
+    let datas = Array.from(
+        document.getElementsByClassName("ecm0bbzt e5nlhep0 a8c37x1j")
     );
-    for (let i of data) {
-        if (!cmt.includes(i)) {
-            contentPort.postMessage({ type: 'getPredict', cmtId: cmt.length, value: i.innerText });
-            cmt.push(i);
+    for (let data of datas) {
+        if (!commentData.includes(data)) {
+            contentPort.postMessage({
+                type: "getPredict",
+                from: "comment",
+                dataId: commentData.length,
+                value: data.innerText,
+            });
+            commentData.push(data);
+            console.log(commentData);
+        }
+    }
+}
+
+function getMessageData() {
+    let datas = Array.from(
+        document.getElementsByClassName("ni8dbmo4 stjgntxs ii04i59q")
+    );
+    for (let data of datas) {
+        if (!messageData.includes(data)) {
+            contentPort.postMessage({
+                type: "getPredict",
+                from: "message",
+                dataId: messageData.length,
+                value: data.innerText,
+            });
+            messageData.push(data);
+            console.log(messageData);
         }
     }
 }
 
 function getStatus() {
-    contentPort.postMessage({ type: 'getStatus' });
+    contentPort.postMessage({ type: "getCommentStatus" });
     contentPort.onMessage.addListener(function (msg, sender) {
-        if (msg.type == 'getStatus') {
-            status = msg.value;
+        if (msg.type == "getCommentStatus") {
+            commentStatus = msg.value;
+        }
+    });
+
+    contentPort.postMessage({ type: "getMessageStatus" });
+    contentPort.onMessage.addListener(function (msg, sender) {
+        if (msg.type == "getMessageStatus") {
+            messageStatus = msg.value;
         }
     });
 }
 
 function hideComment() {
-    for (let i of cmt) {
-        if (i.prediction == true) {
-            i.firstChild.firstChild.innerText = HIDDEN_TEXT;
+    for (let data of commentData) {
+        if (data.prediction == true) {
+            data.firstChild.firstChild.innerText = HIDDEN_TEXT;
         }
     }
 }
 
 function showComment() {
-    for (let i of cmt) {
-        if (i.prediction == true) {
-            i.firstChild.firstChild.innerText = i.originalText;
-            i.firstChild.firstChild.innerHTML = i.originalText;
+    for (let data of commentData) {
+        if (data.prediction == true) {
+            data.firstChild.firstChild.innerText = data.originalText;
+            data.firstChild.firstChild.innerHTML = data.originalText;
         }
     }
 }
 
+function hideMessage() {
+    for (let data of messageData) {
+        if (data.prediction == true) {
+            data.firstChild.firstChild.innerText = HIDDEN_TEXT;
+        }
+    }
+}
 
-
-
-
-
-
+function showMessage() {
+    for (let data of messageData) {
+        if (data.prediction == true) {
+            data.firstChild.firstChild.innerText = data.originalText;
+            data.firstChild.firstChild.innerHTML = data.originalText;
+        }
+    }
+}
