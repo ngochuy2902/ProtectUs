@@ -65,12 +65,46 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* Rounded buttons */
+.button {
+  border-color: transparent;
+  cursor: pointer;
+  background-color: #2196f3;
+  color: #fff;
+  margin-bottom: 1em;
+  padding: 1em;
+  user-select: none;
+}
+
+.round {
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #0a72c4;
+}
+
+.button:active {
+  background-color: #0962aa;
+}
+
+textarea {
+  margin: 1em;
+  width: calc(100% - 2em);
+  padding: 1em;
+  resize: none;
+}
+
 .row {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
   border-bottom: 1px #ccc solid;
+}
+
+.is-flex-direction-column {
+  flex-direction: column !important;
 }
 
 .count {
