@@ -95,7 +95,7 @@ function getCommentData() {
 
 function getMessageData() {
     let datas = Array.from(
-        document.getElementsByClassName("ni8dbmo4 stjgntxs ii04i59q")
+        document.getElementsByClassName("oo9gr5id ii04i59q")
     );
     for (let data of datas) {
         if (!messageData.includes(data)) {
@@ -154,7 +154,7 @@ function hideMessage() {
     let count = 0;
     for (let data of messageData) {
         if (data.prediction == true) {
-            data.firstChild.firstChild.innerText = HIDDEN_TEXT;
+            data.innerText = HIDDEN_TEXT;
             count++;
         }
     }
@@ -167,8 +167,8 @@ function hideMessage() {
 function showMessage() {
     for (let data of messageData) {
         if (data.prediction == true) {
-            data.firstChild.firstChild.innerText = data.originalText;
-            data.firstChild.firstChild.innerHTML = data.originalText;
+            data.innerText = data.originalText;
+            data.innerHTML = data.originalText;
         }
     }
 }

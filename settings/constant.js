@@ -5,4 +5,4 @@ let PROTECTUS_MESSAGE_COUNT_STORAGE = 'PROTECTUS_MESSAGE_COUNT_STORAGE';
 let ACTIVE = 'ACTIVE';
 let INACTIVE = 'INACTIVE';
 let DEFAULT_STATUS = 'INACTIVE';
-let BASE_URL = 'http://ec2-18-191-177-233.us-east-2.compute.amazonaws.com';
+let BASE_URL = 'https://619080eef6bf450017484c0d.mockapi.io/predect/v1/predict';

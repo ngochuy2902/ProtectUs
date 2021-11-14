@@ -15,32 +15,41 @@ chrome.runtime.onConnect.addListener(port => {
                     value: localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)
                 })
             } else if (msg.type == 'getPredict') {
-                let text = msg.value;
-                let request = { "text": text };
-                fetch(BASE_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(request)
+                // let text = msg.value;
+                let text = "";
+                // let request = { "text": text };
+                // fetch(BASE_URL, {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(request)
+                // })
+                //     .then(response => {
+                //         if (response.status != 200 && response.status != 201) {
+                //             console.log('Request error code ' + response.status);
+                //             return;
+                //         }
+                //         response.json().then(data => {
+                //             port.postMessage({
+                //                 type: msg.type,
+                //                 from: msg.from,
+                //                 dataId: msg.dataId,
+                //                 value: data
+                //             })
+                //         })
+                //     })
+                //     .catch(err => {
+                //         console.log('Error: ', err)
+                //     });
+                port.postMessage({
+                    type: msg.type,
+                    from: msg.from,
+                    dataId: msg.dataId,
+                    value: {
+                        prediction: true
+                    }
                 })
-                    .then(response => {
-                        if (response.status != 200) {
-                            console.log('Request error code ' + response.status);
-                            return;
-                        }
-                        response.json().then(data => {
-                            port.postMessage({
-                                type: msg.type,
-                                from: msg.from,
-                                dataId: msg.dataId,
-                                value: data
-                            })
-                        })
-                    })
-                    .catch(err => {
-                        console.log('Error: ', err)
-                    });
             } else if (msg.type == 'setCommentCount' || msg.type == 'setMessageCount') {
                 if (!popupPort) {
                     return;
