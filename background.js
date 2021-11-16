@@ -15,8 +15,8 @@ chrome.runtime.onConnect.addListener(port => {
                     value: localStorage.getItem(PROTECTUS_MESSAGE_STATUS_STORAGE)
                 })
             } else if (msg.type == 'getPredict') {
-                // let text = msg.value;
-                let text = "";
+                let text = msg.value;
+                // let text = "";
                 // let request = { "text": text };
                 // fetch(BASE_URL, {
                 //     method: 'POST',
@@ -42,12 +42,14 @@ chrome.runtime.onConnect.addListener(port => {
                 //     .catch(err => {
                 //         console.log('Error: ', err)
                 //     });
+                const regex = /(béo|mập|ác|ôn|yếu|đuối|hung|dữ|mẹ|đm)/gm;
+                var prediction = regex.test(text);
                 port.postMessage({
                     type: msg.type,
                     from: msg.from,
                     dataId: msg.dataId,
                     value: {
-                        prediction: true
+                        prediction: prediction
                     }
                 })
             } else if (msg.type == 'setCommentCount' || msg.type == 'setMessageCount') {
